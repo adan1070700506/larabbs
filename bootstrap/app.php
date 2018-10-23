@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * require my helpers function
+ */
+require_once __DIR__ . '/helpers.php';
 /*
 |--------------------------------------------------------------------------
 | Create The Application
