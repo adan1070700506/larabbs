@@ -12,11 +12,11 @@
     </head>
     <body>
         <div id="{{ route_class() }}-page">
-            @include('layouts._header');
+            @include('layouts._header')
             <div class="container">
                 @yield('content')
             </div>
-            @include('layouts._footer');
+            @include('layouts._footer')
         </div>
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
