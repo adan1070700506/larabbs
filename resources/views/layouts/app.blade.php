@@ -11,8 +11,8 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
-        <div id="{{ route_class() }}-page">
-            @include('layouts._header')
+        <div id="{{ route_class() }}-page" class="{{ route_class() }}-page">
+            @include('layouts._header',['categories'=>app(\App\Models\Category::class)->allCache()])
             <div class="container">
                 @include('layouts._message')
                 @yield('content')
