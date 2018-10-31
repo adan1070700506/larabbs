@@ -9,6 +9,7 @@
         <mate name="csrf_toke" content="{{ csrf_token() }}"/>
         <title>@yield('title','larabbs')</title>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @yield('styles')
     </head>
     <body>
         <div id="{{ route_class() }}-page" class="{{ route_class() }}-page">
@@ -20,5 +21,6 @@
             @include('layouts._footer')
         </div>
         <script src="{{ asset('js/app.js') }}"></script>
+        @yield('scripts')
     </body>
 </html>
