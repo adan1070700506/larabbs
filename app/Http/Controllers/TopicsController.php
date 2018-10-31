@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Handlers\ImageUploadHandler;
+
 use Auth;
 class TopicsController extends Controller
 {
@@ -18,12 +19,17 @@ class TopicsController extends Controller
 
 	public function index(TopicRequest $request)
 	{
+
 		$topics = Topic::withOrder($request->order)->paginate(30);
 		return view('topics.index', compact('topics'));
 	}
 
-    public function show(Topic $topic)
+    public function show(Topic $topic,TopicRequest $request)
     {
+        // URL 矫正
+        if ( ! empty($topic->slug) && $topic->slug != $request->slug) {
+            return redirect($topic->link(), 301);
+        }
         return view('topics.show', compact('topic'));
     }
 
@@ -39,13 +45,14 @@ class TopicsController extends Controller
         $topic->user_id = Auth::id();
         $topic->save();
 		//$topic = Topic::create($request->all());
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
+		return redirect()->to($topic->link())->with('success', '发布成功！');
 	}
 
 	public function edit(Topic $topic)
 	{
         $this->authorize('update', $topic);
-		return view('topics.create_and_edit', compact('topic'));
+        $categories = Category::all();
+		return view('topics.create_and_edit', compact('topic','categories'));
 	}
 
 	public function update(TopicRequest $request, Topic $topic)
@@ -53,7 +60,7 @@ class TopicsController extends Controller
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+		return redirect()->to($topic->link())->with('success', '保存成功！');
 	}
 
 	public function destroy(Topic $topic)
@@ -61,7 +68,7 @@ class TopicsController extends Controller
 		$this->authorize('destroy', $topic);
 		$topic->delete();
 
-		return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
+		return redirect()->route('topics.index')->with('success', '删除成功！');
 	}
 
     public function uploadImage(Request $request,ImageUploadHandler $uploader)
