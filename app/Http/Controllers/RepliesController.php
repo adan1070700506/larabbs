@@ -21,14 +21,13 @@ class RepliesController extends Controller
         $reply->topic_id = $request->input('topic_id');
         $reply->user_id = Auth::id();
         $reply->save();
-		return redirect()->route('topics.show', $reply->topic_id)->with('success', '评论发布成功~');
+		return redirect()->to($reply->topic->link())->with('success', '评论发布成功~');
 	}
 
 	public function destroy(Reply $reply)
 	{
 		$this->authorize('destroy', $reply);
 		$reply->delete();
-
-		return redirect()->route('topics.show', $reply->topic_id)->with('success', '评论删除成功~');
+		return redirect()->to($reply->topic->link())->with('success', '评论删除成功~');
 	}
 }
